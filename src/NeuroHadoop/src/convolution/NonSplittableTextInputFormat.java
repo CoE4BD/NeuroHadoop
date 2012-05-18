@@ -1,4 +1,4 @@
-package convolution.rchannel;
+package convolution;
 
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.mapred.TextInputFormat;

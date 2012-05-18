@@ -1,6 +1,5 @@
-package rat.settings;
+package settings;
 
-//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

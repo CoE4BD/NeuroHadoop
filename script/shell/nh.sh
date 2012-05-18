@@ -42,8 +42,8 @@ ant clean
 
 #Run the job
 cd /neuro/tmp
-hadoop jar /neuro/neurosrc/lib/NeuroSettings.jar rat.settings.SettingsJob /neuro/input /neuro/hive/session > /neuro/tmp/session.txt
-hadoop jar /neuro/neurosrc/lib/NeuroHadoop.jar convolution.rchannel.ConvolutionJob /neuro/input /neuro/output/rats > /neuro/tmp/output.txt
+hadoop jar /neuro/neurosrc/lib/NeuroSettings.jar settings.SettingsJob /neuro/input /neuro/hive/session > /neuro/tmp/session.txt
+hadoop jar /neuro/neurosrc/lib/NeuroHadoop.jar convolution.ConvolutionJob /neuro/input /neuro/output/rats > /neuro/tmp/output.txt
 
 END=$(date +%s)
 DIFF=$(($END - $START))
