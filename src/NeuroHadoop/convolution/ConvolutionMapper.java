@@ -26,7 +26,7 @@ import convolution.rchannel.RChannelDataPoint;
 public class ConvolutionMapper extends MapReduceBase implements
 		Mapper<LongWritable, Text, NullWritable, Text> {
 
-	public static final String HDFS_KERNEL = "s3n://coe4bd/neuro/lookup/morlet-2000.dat";
+	public static final String HDFS_KERNEL = "/neuro/lookup/morlet-2000.dat";
 	public static final int SIGNAL_BUFFER_SIZE = 10000000;
 	public static final int KERNEL_START_FREQ = 5;
 	public static final int KERNEL_END_FREQ = 200;

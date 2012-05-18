@@ -33,7 +33,7 @@ import convolution.NonSplittableTextInputFormat;
  */
 
 public class ConvolutionJob extends Configured implements Tool {
-	static final String HDFS_KERNEL = "s3n://coe4bd/neuro/lookup/morlet-2000.dat";
+	static final String HDFS_KERNEL = "/neuro/lookup/morlet-2000.dat";
 
 	void cacheKernel(JobConf conf) throws IOException {
 		Path hdfsPath = new Path(HDFS_KERNEL);
