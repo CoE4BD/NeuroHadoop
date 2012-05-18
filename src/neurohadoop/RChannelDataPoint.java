@@ -1,4 +1,4 @@
-package convolution;
+package neurohadoop;
 
 /**
  * RChannel DataPoint

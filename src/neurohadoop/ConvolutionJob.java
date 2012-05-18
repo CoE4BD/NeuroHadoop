@@ -1,4 +1,4 @@
-package convolution;
+package neurohadoop;
 
 import java.io.IOException;
 import java.io.File;
@@ -19,8 +19,8 @@ import org.apache.hadoop.mapred.lib.MultipleSequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import convolution.ConvolutionMapper;
-import convolution.NonSplittableTextInputFormat;
+import neurohadoop.ConvolutionMapper;
+import neurohadoop.NonSplittableTextInputFormat;
 
 /**
  * 

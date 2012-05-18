@@ -1,4 +1,4 @@
-package convolution;
+package neurohadoop;
 
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.mapred.TextInputFormat;

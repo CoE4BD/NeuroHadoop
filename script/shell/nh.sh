@@ -1,5 +1,4 @@
 #!/bin/bash
-START=$(date +%s)
 NUM_BUCKETS=75
 
 #Clean hdfs
@@ -22,29 +21,12 @@ hadoop fs -put /neuro/data/signals/*.csv /neuro/input/
 hadoop fs -put /neuro/data/passes/*.csv /neuro/output/passes/
 hadoop fs -put /neuro/data/phase/*.csv /neuro/output/phase/
 
-#Build Neuro Hadoop Settings jar
-cd /neuro/neurosrc/src/NeuroSettings
-ant
-cp /neuro/neurosrc/src/NeuroSettings/dist/NeuroSettings.jar /neuro/neurosrc/lib/NeuroSettings.jar
-ant clean
-
-#Build Neuro Hadoop jar
-cd /neuro/neurosrc/src/NeuroHadoop
-ant
-cp /neuro/neurosrc/src/NeuroHadoop/dist/NeuroHadoop.jar /neuro/neurosrc/lib/NeuroHadoop.jar
-ant clean
-
-#Build Neuro Hive jar
-cd /neuro/neurosrc/src/NeuroHive
-ant
-cp /neuro/neurosrc/src/NeuroHive/dist/NeuroHive.jar /neuro/neurosrc/lib/NeuroHive.jar
-ant clean
-
 #Run the job
 cd /neuro/tmp
-hadoop jar /neuro/neurosrc/lib/NeuroSettings.jar settings.SettingsJob /neuro/input /neuro/hive/session > /neuro/tmp/session.txt
-hadoop jar /neuro/neurosrc/lib/NeuroHadoop.jar convolution.ConvolutionJob /neuro/input /neuro/output/rats > /neuro/tmp/output.txt
+hadoop jar ~/NeuroHadoop/lib/NeuroHadoop.jar neurohadoop.SettingsJob /neuro/input /neuro/hive/session > /neuro/tmp/session.txt
 
+START=$(date +%s)
+hadoop jar ~/NeuroHadoop/lib/NeuroHadoop.jar neurohadoop.ConvolutionJob /neuro/input /neuro/output/rats > /neuro/tmp/output.txt
 END=$(date +%s)
 DIFF=$(($END - $START))
 echo "ConvolutionJob took $DIFF seconds"

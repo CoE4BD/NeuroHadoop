@@ -1,4 +1,4 @@
-package convolution;
+package neurohadoop;
 
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -16,7 +16,7 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-import convolution.rchannel.RChannelDataPoint;
+import neurohadoop.RChannelDataPoint;
 
 /**
  * ConvolutionMapper

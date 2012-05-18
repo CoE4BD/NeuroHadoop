@@ -1,4 +1,4 @@
-package convolution.hive.udaf;
+package neurohadoop;
 
 import org.apache.hadoop.hive.ql.exec.UDAF;
 import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;

@@ -1,4 +1,4 @@
-package settings;
+package neurohadoop;
 
 import java.io.File;
 //import java.io.FileReader;
