@@ -7,7 +7,7 @@
     <property name="jar.dir"     value="${build.dir}/lib"/>
 	<property name="hadoop.dir"  value="hlib"/>
 	<property name="script.dir"  value="script/shell"/>
-	<property name="upload"      value="upload.sh"/>
+	<property name="upload"      value="./upload.sh"/>
 
 	<path id="classpath">
   		<fileset dir="${hadoop.dir}">
