@@ -6,10 +6,10 @@ LOCATION '/neuro/output/passes/'
 ;
 
 -- Add jar for custom Group Concat UDAF
-add jar /neuro/neurosrc/lib/NeuroHive.jar;
+add jar /home/brad/NeuroHadoop/lib/NeuroHive.jar;
 
 -- Create temporary Hive UDF Neuro Group Concat (ngc)
-create temporary function ngc as 'convolution.hive.udaf.NGroupConcat';
+create temporary function ngc as 'neurohadoop.NGroupConcat';
 
 -- Use ngc to generate create script for table rat subset
 SELECT concat(
