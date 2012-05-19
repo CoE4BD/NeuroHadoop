@@ -6,7 +6,7 @@ LOCATION '/neuro/output/passes/'
 ;
 
 -- Add jar for custom Group Concat UDAF
-add jar /home/brad/NeuroHadoop/lib/NeuroHive.jar;
+add jar ${hiveconf:nhhome}/lib/NeuroHive.jar;
 
 -- Create temporary Hive UDF Neuro Group Concat (ngc)
 create temporary function ngc as 'neurohadoop.NGroupConcat';
