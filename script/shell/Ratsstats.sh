@@ -1,3 +1,3 @@
 #!/bin/bash
 
-hive -S -f ~/NeuroHadoop/script/hive/ratstats.q
+hive -S -f $NH_HOME/script/hive/ratstats.q
