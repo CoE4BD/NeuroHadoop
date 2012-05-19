@@ -25,12 +25,12 @@ public class SettingsMapper extends MapReduceBase implements
 	private int n = 0;
 
 	private String ratnumber;
-	private	String sessiondate;
+	private String sessiondate;
 	private String channelid;
 
 	@Override
 	public void configure(JobConf conf) {
-		
+
 		try {
 			getSessionSettings(conf);
 		} catch (IOException ioe) {
@@ -47,41 +47,37 @@ public class SettingsMapper extends MapReduceBase implements
 		int indexEnd = fname.indexOf('-');
 
 		ratnumber = fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd+1;
+		indexBegin = indexEnd + 1;
 		indexEnd = fname.indexOf('-', indexBegin);
 		sessiondate = fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd+1;
+		indexBegin = indexEnd + 1;
 		indexEnd = fname.indexOf('-', indexBegin);
 		sessiondate = sessiondate + '-' + fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd+1;
+		indexBegin = indexEnd + 1;
 		indexEnd = fname.indexOf('-', indexBegin);
 		sessiondate = sessiondate + '-' + fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd+4;
+		indexBegin = indexEnd + 4;
 		indexEnd = fname.indexOf('.', indexBegin);
 		channelid = fname.substring(indexBegin, indexEnd);
 
 	}
 
+	@Override
 	public void map(LongWritable inkey, Text value,
-		OutputCollector<NullWritable, Text> output,
-		Reporter reporter) throws IOException {
+			OutputCollector<NullWritable, Text> output, Reporter reporter)
+			throws IOException {
 
 		try {
-			if (n==0) {
-				n=1;
-				out_value.set(
-					ratnumber + "," +
-					sessiondate + "," +
-					channelid)
-				;
+			if (n == 0) {
+				n = 1;
+				out_value.set(ratnumber + "," + sessiondate + "," + channelid);
 				output.collect(NullWritable.get(), out_value);
 			}
-					
+
 		} catch (IOException ioe) {
 			System.err.println(ioe.getMessage());
 			System.exit(0);
-	   }
+		}
 	} // map
 
 }
-	

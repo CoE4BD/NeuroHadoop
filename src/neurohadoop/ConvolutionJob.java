@@ -40,37 +40,40 @@ public class ConvolutionJob extends Configured implements Tool {
 		DistributedCache.addCacheFile(hdfsPath.toUri(), conf);
 	}
 
-	static class MultiFileOutput extends MultipleSequenceFileOutputFormat<Text, Text> {
-		protected String getInputFileBasedOutputFileName(JobConf conf, String name) {
+	static class MultiFileOutput extends
+			MultipleSequenceFileOutputFormat<Text, Text> {
+		@Override
+		protected String getInputFileBasedOutputFileName(JobConf conf,
+				String name) {
 			String fpath = conf.get("map.input.file");
 			String fname = new File(fpath).getName();
 
 			String ratnumber;
 			String sessiondate;
 			String channelid;
-			
+
 			int indexBegin = 0;
 			int indexEnd = fname.indexOf('-');
 
 			ratnumber = fname.substring(indexBegin, indexEnd);
-			indexBegin = indexEnd+1;
+			indexBegin = indexEnd + 1;
 			indexEnd = fname.indexOf('-', indexBegin);
 			sessiondate = fname.substring(indexBegin, indexEnd);
-			indexBegin = indexEnd+1;
+			indexBegin = indexEnd + 1;
 			indexEnd = fname.indexOf('-', indexBegin);
-			sessiondate = sessiondate + '-' + fname.substring(indexBegin, indexEnd);
-			indexBegin = indexEnd+1;
+			sessiondate = sessiondate + '-'
+					+ fname.substring(indexBegin, indexEnd);
+			indexBegin = indexEnd + 1;
 			indexEnd = fname.indexOf('-', indexBegin);
-			sessiondate = sessiondate + '-' + fname.substring(indexBegin, indexEnd);
-			indexBegin = indexEnd+4;
+			sessiondate = sessiondate + '-'
+					+ fname.substring(indexBegin, indexEnd);
+			indexBegin = indexEnd + 4;
 			indexEnd = fname.indexOf('.', indexBegin);
 			channelid = fname.substring(indexBegin, indexEnd);
 
-			return "rat=" + ratnumber +
-				"/dt=" + sessiondate +
-				"/channel=" + channelid + "/" +
-				ratnumber + "-" + sessiondate + "-" + channelid
-			;
+			return "rat=" + ratnumber + "/dt=" + sessiondate + "/channel="
+					+ channelid + "/" + ratnumber + "-" + sessiondate + "-"
+					+ channelid;
 		}
 	}
 
@@ -80,11 +83,11 @@ public class ConvolutionJob extends Configured implements Tool {
 		System.out.println("\n\nConvolutionJob\n");
 		JobConf conf = new JobConf(getConf(), ConvolutionJob.class);
 		conf.setJobName("ConvolutionJob");
-		
+
 		this.cacheKernel(conf);
 		conf.setMapperClass(ConvolutionMapper.class);
 		List<String> other_args = new ArrayList<String>();
-		for(int i=0; i < args.length; ++i) {
+		for (int i = 0; i < args.length; ++i) {
 			try {
 				if ("-m".equals(args[i])) {
 					conf.setNumMapTasks(Integer.parseInt(args[++i]));
@@ -94,17 +97,20 @@ public class ConvolutionJob extends Configured implements Tool {
 					other_args.add(args[i]);
 				}
 			} catch (NumberFormatException except) {
-				System.out.println("ERROR: Integer expected instead of " + args[i]);
+				System.out.println("ERROR: Integer expected instead of "
+						+ args[i]);
 				return printUsage();
 			} catch (ArrayIndexOutOfBoundsException except) {
-				System.out.println("ERROR: Required parameter missing from " + args[i-1]);
+				System.out.println("ERROR: Required parameter missing from "
+						+ args[i - 1]);
 				return printUsage();
 			}
 		}
 
 		// Make sure there are exactly 2 parameters left.
 		if (other_args.size() != 2) {
-			System.out.println("ERROR: Wrong number of parameters: " + other_args.size() + " instead of 2.");
+			System.out.println("ERROR: Wrong number of parameters: "
+					+ other_args.size() + " instead of 2.");
 			return printUsage();
 		}
 
@@ -114,7 +120,8 @@ public class ConvolutionJob extends Configured implements Tool {
 		conf.setOutputKeyClass(NullWritable.class);
 		conf.setOutputValueClass(Text.class);
 		conf.setCompressMapOutput(true);
-		conf.set("mapred.output.compression.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+		conf.set("mapred.output.compression.codec",
+				"org.apache.hadoop.io.compress.SnappyCodec");
 		conf.set("mapred.output.compression.type", "BLOCK");
 
 		FileInputFormat.setInputPaths(conf, other_args.get(0));
@@ -127,13 +134,15 @@ public class ConvolutionJob extends Configured implements Tool {
 	}
 
 	static int printUsage() {
-		System.out.println("ConvolutionJob [-m <maps>] [-r <reduces>] <input> <output>");
+		System.out
+				.println("ConvolutionJob [-m <maps>] [-r <reduces>] <input> <output>");
 		ToolRunner.printGenericCommandUsage(System.out);
 		return -1;
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new ConvolutionJob(), args);
+		int res = ToolRunner.run(new Configuration(), new ConvolutionJob(),
+				args);
 		System.exit(res);
 
 	}

@@ -23,10 +23,10 @@ public class SettingsJob extends Configured implements Tool {
 		System.out.println("\n\nSettingsJob\n");
 		JobConf conf = new JobConf(getConf(), SettingsJob.class);
 		conf.setJobName("SettingsJob");
-		
+
 		conf.setMapperClass(SettingsMapper.class);
 		List<String> other_args = new ArrayList<String>();
-		for(int i=0; i < args.length; ++i) {
+		for (int i = 0; i < args.length; ++i) {
 			try {
 				if ("-m".equals(args[i])) {
 					conf.setNumMapTasks(Integer.parseInt(args[++i]));
@@ -36,27 +36,31 @@ public class SettingsJob extends Configured implements Tool {
 					other_args.add(args[i]);
 				}
 			} catch (NumberFormatException except) {
-				System.out.println("ERROR: Integer expected instead of " + args[i]);
+				System.out.println("ERROR: Integer expected instead of "
+						+ args[i]);
 				return printUsage();
 			} catch (ArrayIndexOutOfBoundsException except) {
-				System.out.println("ERROR: Required parameter missing from " + args[i-1]);
+				System.out.println("ERROR: Required parameter missing from "
+						+ args[i - 1]);
 				return printUsage();
 			}
 		}
 
 		// Make sure there are exactly 2 parameters left.
 		if (other_args.size() != 2) {
-			System.out.println("ERROR: Wrong number of parameters: " + other_args.size() + " instead of 2.");
+			System.out.println("ERROR: Wrong number of parameters: "
+					+ other_args.size() + " instead of 2.");
 			return printUsage();
 		}
 
 		conf.setNumReduceTasks(0);
-		//conf.setInputFormat(NonSplittableTextInputFormat.class);
-		//conf.setOutputFormat(MultiFileOutput.class);
+		// conf.setInputFormat(NonSplittableTextInputFormat.class);
+		// conf.setOutputFormat(MultiFileOutput.class);
 		conf.setOutputKeyClass(NullWritable.class);
 		conf.setOutputValueClass(Text.class);
 		conf.setCompressMapOutput(true);
-		conf.set("mapred.output.compression.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+		conf.set("mapred.output.compression.codec",
+				"org.apache.hadoop.io.compress.SnappyCodec");
 		conf.set("mapred.output.compression.type", "BLOCK");
 
 		FileInputFormat.setInputPaths(conf, other_args.get(0));
@@ -68,7 +72,8 @@ public class SettingsJob extends Configured implements Tool {
 	}
 
 	static int printUsage() {
-		System.out.println("SettingsJob [-m <maps>] [-r <reduces>] <input> <output>");
+		System.out
+				.println("SettingsJob [-m <maps>] [-r <reduces>] <input> <output>");
 		ToolRunner.printGenericCommandUsage(System.out);
 		return -1;
 	}

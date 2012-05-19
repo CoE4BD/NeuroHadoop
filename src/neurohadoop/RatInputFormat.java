@@ -10,7 +10,7 @@ package neurohadoop;
  * data source work with this example.
  * 
  */
-public class RChannelDataPoint {
+public class RatInputFormat {
 
 	public String timestamp;
 	public String voltage = String.valueOf(0);
@@ -25,9 +25,9 @@ public class RChannelDataPoint {
 
 	}
 
-	public static RChannelDataPoint parse(String csvRow) {
+	public static RatInputFormat parse(String csvRow) {
 
-		RChannelDataPoint rec = new RChannelDataPoint();
+		RatInputFormat rec = new RatInputFormat();
 
 		String[] values = csvRow.split(",");
 
