@@ -21,7 +21,7 @@ hadoop fs -put /neuro/data/passes/*.csv /neuro/output/passes/
 hadoop fs -put /neuro/data/phase/*.csv /neuro/output/phase/
 
 # Run the jobs
-for S in SettingsJob ConvolutionJob Session Rats Ratsaverage Ratsstats Ratssubset Phasebucket Result
+for S in Clean Putdata SettingsJob ConvolutionJob Session Rats Ratsaverage Ratsstats Ratssubset Phasebucket Result
 
 do
     START=$(date +%s)
