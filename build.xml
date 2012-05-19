@@ -4,19 +4,26 @@
 
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="jar.dir"     value="${build.dir}/lib"/>
+	<property name="hadoop.dir"  value="hlib"/>
+	<property name="script.dir"  value="script/shell"/>
+	<property name="upload"      value="upload.sh"/>
 
-    <property name="main-class"  value="oata.HelloWorld"/>
-
-
-
+	<path id="classpath">
+  		<fileset dir="${hadoop.dir}">
+		  <include name="**/*.jar"/>
+		</fileset>
+	</path>
+	
     <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}">
+        	<classpath refid="classpath"/>
+        </javac>
     </target>
 
     <target name="jar" depends="compile">
@@ -28,12 +35,10 @@
         </jar>
     </target>
 
-    <target name="run" depends="jar">
-        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
-    </target>
-
-    <target name="clean-build" depends="clean,jar"/>
-
-    <target name="main" depends="clean,run"/>
+	<target name="upload" depends="jar">
+		  <exec dir="${script.dir}" executable="${upload}" />
+	</target>
+	
+    <target name="main" depends="clean,jar"/>
 
 </project>
