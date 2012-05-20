@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.File;
 import java.util.HashMap;
+import java.text.DecimalFormat;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
@@ -41,7 +42,8 @@ public class ConvolutionMapper extends MapReduceBase implements
 	private HashMap<Integer, String> kernelMap;
 	private short[][] kernelStack = new short[KERNEL_END_FREQ + 1][KERNEL_WINDOW_SIZE];
 	private int n = 0;
-
+    private DecimalFormat df = new DecimalFormat("0.####E0");
+    
 	private float[] signal = new float[SIGNAL_BUFFER_SIZE];
 	private float[] kernel = new float[SIGNAL_BUFFER_SIZE];
 	private long[] timestamp = new long[SIGNAL_BUFFER_SIZE];
@@ -193,7 +195,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 				tempTime = System.currentTimeMillis();
 				int t = KERNEL_WINDOW_SIZE - 1;
 				for (int i = (SIGNAL_BUFFER_SIZE / 2 - KERNEL_WINDOW_SIZE + 1) * 2; i > (SIGNAL_BUFFER_SIZE / 2 - n) * 2; i = i - 2) {
-					out_value.set(timestamp[t] + "," + k + "," + Math.pow(kernel[i],2));
+					out_value.set(timestamp[t] + "," + k + "," + df.format(Math.pow(kernel[i],2)));
 					saveOutput.collect(NullWritable.get(), out_value);
 					t++;
 				}
