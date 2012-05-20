@@ -118,7 +118,7 @@ public class ConvolutionJob extends Configured implements Tool {
 		conf.setInputFormat(NonSplittableTextInputFormat.class);
 		conf.setOutputFormat(MultiFileOutput.class);
 		conf.setOutputKeyClass(NullWritable.class);
-		conf.setOutputValueClass(Text.class);
+		conf.setOutputValueClass(RatWritable.class);
 		conf.setCompressMapOutput(true);
 		conf.set("mapred.output.compression.codec",
 				"org.apache.hadoop.io.compress.SnappyCodec");

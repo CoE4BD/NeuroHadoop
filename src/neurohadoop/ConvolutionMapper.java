@@ -23,11 +23,10 @@ import org.apache.hadoop.mapred.Reporter;
  * ConvolutionMapper
  */
 public class ConvolutionMapper extends MapReduceBase implements
-		Mapper<LongWritable, Text, NullWritable, Text> {
+		Mapper<LongWritable, Text, NullWritable, RatWritable> {
 
 	public static final String HDFS_KERNEL = "lookup/morlet-2000.dat";
 	public static final int SIGNAL_BUFFER_SIZE = 16777216;
-	// public static final int SIGNAL_BUFFER_SIZE = 1048576;
 	public static final int KERNEL_START_FREQ = 5;
 	public static final int KERNEL_END_FREQ = 200;
 	public static final int KERNEL_WINDOW_SIZE = 2001;
@@ -37,7 +36,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 	};
 
 	private String sessiondate;
-	private final Text out_value = new Text();
+	private final RatWritable out_value = new RatWritable();
 	private HashMap<Integer, String> kernelMap;
 	private short[][] kernelStack = new short[KERNEL_END_FREQ + 1][KERNEL_WINDOW_SIZE];
 	private int n = 0;
@@ -46,7 +45,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 	private float[] kernel = new float[SIGNAL_BUFFER_SIZE];
 	private long[] timestamp = new long[SIGNAL_BUFFER_SIZE];
 
-	private OutputCollector<NullWritable, Text> saveOutput;
+	private OutputCollector<NullWritable, RatWritable> saveOutput;
 	private RatInputFormat rec;
 	private long lastTimestamp = 0;
 	// private static final Logger logger =
@@ -121,7 +120,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 
 	@Override
 	public void map(LongWritable inkey, Text value,
-			OutputCollector<NullWritable, Text> output, Reporter reporter)
+			OutputCollector<NullWritable, RatWritable> output, Reporter reporter)
 			throws IOException {
 		saveOutput = output;
 		rec = RatInputFormat.parse(value.toString());
@@ -193,7 +192,9 @@ public class ConvolutionMapper extends MapReduceBase implements
 				tempTime = System.currentTimeMillis();
 				int t = KERNEL_WINDOW_SIZE - 1;
 				for (int i = (SIGNAL_BUFFER_SIZE / 2 - KERNEL_WINDOW_SIZE + 1) * 2; i > (SIGNAL_BUFFER_SIZE / 2 - n) * 2; i = i - 2) {
-					out_value.set(timestamp[t] + "," + k + "," + Math.pow(kernel[i],2));
+					out_value.timestamp = t;
+					out_value.frequency = k;
+					out_value.convolution = (float)Math.pow(kernel[i],2);
 					saveOutput.collect(NullWritable.get(), out_value);
 					t++;
 				}
