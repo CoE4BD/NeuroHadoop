@@ -29,7 +29,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 	public static final int SIGNAL_BUFFER_SIZE = 16777216;
 	// public static final int SIGNAL_BUFFER_SIZE = 1048576;
 	public static final int KERNEL_START_FREQ = 5;
-	public static final int KERNEL_END_FREQ = 9;
+	public static final int KERNEL_END_FREQ = 200;
 	public static final int KERNEL_WINDOW_SIZE = 2001;
 
 	static enum Parse_Counters {
