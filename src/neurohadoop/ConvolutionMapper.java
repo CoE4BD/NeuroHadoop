@@ -193,7 +193,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 				tempTime = System.currentTimeMillis();
 				int t = KERNEL_WINDOW_SIZE - 1;
 				for (int i = (SIGNAL_BUFFER_SIZE / 2 - KERNEL_WINDOW_SIZE + 1) * 2; i > (SIGNAL_BUFFER_SIZE / 2 - n) * 2; i = i - 2) {
-					out_value.set(timestamp[t] + "," + k + "," + kernel[i]);
+					out_value.set(timestamp[t] + "," + k + "," + Math.pow(kernel[i],2));
 					saveOutput.collect(NullWritable.get(), out_value);
 					t++;
 				}

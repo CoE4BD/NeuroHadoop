@@ -1,26 +1,9 @@
 SELECT DISTINCT concat(
 	"
-		ALTER TABLE ratsaverage ADD PARTITION(rat='", TRIM(rat), "',dt='", TRIM(dt), "',channel='", TRIM(channel), "')\;
-
-		INSERT OVERWRITE TABLE ratsaverage PARTITION (rat='", TRIM(rat), "',dt='", TRIM(dt), "',channel='", TRIM(channel), "')
-		SELECT time, frequency, POW(convolution, 2)
-		FROM rats
-		WHERE rat='", rat, "'
-		AND dt='", dt, "'
-		AND channel='", channel, "'
-		\;
-	"
-	)
-FROM session
-WHERE channel LIKE '%r%'
-;
-
-SELECT DISTINCT concat(
-	"
 		ALTER TABLE ratsaverage ADD PARTITION(rat='", TRIM(rat), "',dt='", TRIM(dt), "',channel='avg')\;
 
 		INSERT OVERWRITE TABLE ratsaverage PARTITION (rat='", TRIM(rat), "',dt='", TRIM(dt), "',channel='avg')
-		SELECT time, frequency, AVG(POW(convolution, 2))
+		SELECT time, frequency, AVG(convolution)
 		FROM rats
 		WHERE rat='", rat, "'
 		AND dt='", dt, "'
