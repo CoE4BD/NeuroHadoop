@@ -22,4 +22,9 @@ public class RatWritable implements Writable {
 	  out.writeShort(frequency);
 	  out.writeFloat(convolution);
   }
+  
+  @Override
+  public String toString() {
+	  return timestamp + "\t" + frequency + "\t" + convolution;
+  }
 }
