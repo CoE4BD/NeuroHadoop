@@ -8,18 +8,18 @@ import org.apache.hadoop.io.Writable;
 
 public class RatWritable implements Writable {
   int timestamp;
-  int frequency;
+  short frequency;
   float convolution;
   
   public void readFields(DataInput in) throws IOException {
 	  timestamp = in.readInt();
-	  frequency = in.readInt();
+	  frequency = in.readShort();
 	  convolution = in.readFloat();
   }
   
   public void write(DataOutput out) throws IOException {
 	  out.writeInt(timestamp);
-	  out.writeInt(frequency);
+	  out.writeShort(frequency);
 	  out.writeFloat(convolution);
   }
 }
