@@ -155,7 +155,7 @@ public class ConvolutionMapper extends MapReduceBase implements
 			System.out.println("Signal FFT: "
 					+ (System.currentTimeMillis() - tempTime));
 
-			for (int k = KERNEL_START_FREQ; k <= KERNEL_END_FREQ; k++) {
+			for (short k = KERNEL_START_FREQ; k <= KERNEL_END_FREQ; k++) {
 
 				// Kernel FFT
 				tempTime = System.currentTimeMillis();
