@@ -1,7 +1,7 @@
 DROP TABLE rats;
 DROP TABLE ratsaverage;
 
-add jar /home/brad/NeuroHadoop/lib/NeuroHadoop.jar;
+ADD JAR ${hiveconf:nhhome}/lib/NeuroHadoop.jar;
 
 CREATE EXTERNAL TABLE rats(time INT, frequency SMALLINT, convolution FLOAT)
 PARTITIONED BY(rat STRING, dt STRING, channel STRING)
