@@ -30,6 +30,9 @@ public class RatSerde implements SerDe {
 
 	List<String> columnNames;
 	List<ObjectInspector> columnOIs;
+	IntWritable i = new IntWritable();
+	ShortWritable s = new ShortWritable();
+	FloatWritable f = new FloatWritable();
 
 	@Override
 	public void initialize(Configuration conf, Properties props)
@@ -63,9 +66,13 @@ public class RatSerde implements SerDe {
 		RatWritable rw = (RatWritable) blob;
 		//LOG.debug("Deserialize row: " + rw.toString());
 
-		row.set(0, new IntWritable(rw.time));
-		row.set(1, new ShortWritable(rw.frequency));
-		row.set(2, new FloatWritable(rw.convolution));
+		i.set(rw.time);
+		s.set(rw.frequency);
+		f.set(rw.convolution);
+		
+		row.set(0, i);
+		row.set(1, s);
+		row.set(2, f);
 
 		return row;
 	}
