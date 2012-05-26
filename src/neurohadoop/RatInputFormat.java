@@ -15,8 +15,8 @@ public class RatInputFormat {
 	public String timestamp;
 	public String voltage = String.valueOf(0);
 
-	public short getVoltage() {
-		return Short.parseShort(this.voltage);
+	public float getVoltage() {
+		return Float.parseFloat(this.voltage);
 
 	}
 

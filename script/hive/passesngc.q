@@ -19,7 +19,7 @@ SELECT concat(
 	\;
 	INSERT OVERWRITE TABLE ratssubset
 	SELECT r.rat, r.dt, r.channel, r.time, r.frequency, (r.convolution-s.mean) / s.sd AS convolution
-	FROM ratsaverage r JOIN ratstats s ON (
+	FROM rats r JOIN ratstats s ON (
 		r.rat = s.rat AND
 		r.dt = s.dt AND
 		r.channel = s.channel AND
