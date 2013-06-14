@@ -1,3 +1,3 @@
 #!/bin/bash
 
-hive -f /neuro/neurosrc/script/hive/session.q
+hive -f $NH_HOME/script/hive/session.q

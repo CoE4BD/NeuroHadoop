@@ -10,7 +10,8 @@ import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde2.SerDe;
-import org.apache.hadoop.hive.serde.Constants;
+import org.apache.hadoop.hive.serde2.SerDeStats;
+import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
@@ -49,7 +50,7 @@ public class RatSerde implements SerDe {
 				.add(PrimitiveObjectInspectorFactory.writableShortObjectInspector);
 		columnOIs
 				.add(PrimitiveObjectInspectorFactory.writableFloatObjectInspector);
-		String columnNameProperty = props.getProperty(Constants.LIST_COLUMNS);
+		String columnNameProperty = props.getProperty(serdeConstants.LIST_COLUMNS);
 		columnNames = Arrays.asList(columnNameProperty.split(","));
 		rowOI = ObjectInspectorFactory.getStandardStructObjectInspector(
 				columnNames, columnOIs);
@@ -88,6 +89,12 @@ public class RatSerde implements SerDe {
 			throws SerDeException {
 		return null;
 		// serialization not supported
+	}
+
+	@Override
+	public SerDeStats getSerDeStats() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
