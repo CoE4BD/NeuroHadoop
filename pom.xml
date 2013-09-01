@@ -12,6 +12,8 @@
     <properties>
       <hadoop.version>2.0.0-mr1-cdh4.3.1</hadoop.version>
       <hive.version>0.10.0-cdh4.3.1</hive.version>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <build>
