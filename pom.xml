@@ -1,6 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-		http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.stthomas.gps</groupId>
     <artifactId>NeuroHadoop</artifactId>
@@ -9,9 +10,38 @@
     <name>NeuroHadoop</name>
     <url>http://maven.apache.org</url>
 
+    <licenses>
+      <license>
+        <name>Apache 2</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+        <comments>A business-friendly OSS license</comments>
+      </license>
+    </licenses>
+
+    <organization>
+      <name>University of St. Thomas Graduate Programs in Software</name>
+      <url>http://www.stthomas.edu/software</url>
+    </organization>
+
+    <developers>
+      <developer>
+        <id>brad</id>
+        <name>Bradley S. Rubin</name>
+        <email>bsrubin@stthomas.edu</email>
+        <url>http://www.bradrubin.com</url>
+        <organization>Graduate Programs in Software</organization>
+        <organizationUrl>http://www.stthomas.edu/software</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+        <timezone>-6</timezone>
+      </developer>
+    </developers>
+
     <properties>
-      <hadoop.version>2.0.0-mr1-cdh4.3.1</hadoop.version>
-      <hive.version>0.10.0-cdh4.3.1</hive.version>
+      <hadoop.version>2.0.0-mr1-cdh4.4.0</hadoop.version>
+      <hive.version>0.10.0-cdh4.4.0</hive.version>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -56,9 +86,9 @@
           </configuration>
         </plugin>
         <plugin>
-          <artifactId>exec-maven-plugin</artifactId>
           <groupId>org.codehaus.mojo</groupId>
-	  <version>1.2.1</version>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
           <executions>
             <execution>
               <id>upload</id>
@@ -71,6 +101,24 @@
               </configuration>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.0</version>
+          <configuration>
+            <reportPlugins>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.2</version>
+                <reports>
+                  <report>index</report>
+                  <report>license</report>
+                </reports>
+              </plugin>
+            </reportPlugins>
+          </configuration>
         </plugin>
       </plugins>
     </build>
@@ -109,4 +157,3 @@
       </repository>
     </repositories>
   </project>
-

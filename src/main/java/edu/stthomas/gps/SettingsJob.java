@@ -1,8 +1,5 @@
 package edu.stthomas.gps;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.conf.Configuration;
@@ -20,34 +17,24 @@ public class SettingsJob extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 
 		System.out.println("\n\nSettingsJob\n");
-		Configuration conf = new Configuration();
+		Configuration conf = getConf();
 		conf.setBoolean("mapred.compress.map.output", true);
 		conf.set("mapred.output.compression.codec",
 				"org.apache.hadoop.io.compress.SnappyCodec");
 		conf.set("mapred.output.compression.type", "BLOCK");
+		
 		Job job = new Job(conf);
 		job.setJobName("SettingsJob");
-
-		job.setMapperClass(SettingsMapper.class);
-		List<String> other_args = new ArrayList<String>();
-
+		job.setJarByClass(SettingsJob.class);
 		job.setNumReduceTasks(0);
-		// conf.setInputFormat(NonSplittableTextInputFormat.class);
-		// conf.setOutputFormat(MultiFileOutput.class);
 		job.setOutputKeyClass(NullWritable.class);
 		job.setOutputValueClass(Text.class);
+		job.setMapperClass(SettingsMapper.class);
 
-		FileInputFormat.setInputPaths(job, other_args.get(0));
-		FileOutputFormat.setOutputPath(job, new Path(other_args.get(1)));
+		FileInputFormat.setInputPaths(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
 		return (job.waitForCompletion(true) ? 0 : 1);
-	}
-
-	static int printUsage() {
-		System.out
-				.println("SettingsJob [-m <maps>] [-r <reduces>] <input> <output>");
-		ToolRunner.printGenericCommandUsage(System.out);
-		return -1;
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-hadoop jar $NH_HOME/lib/NeuroHadoop-2.0.jar neurohadoop.SettingsJob /neuro/input /neuro/hive/session
+hadoop jar $NH_HOME/lib/NeuroHadoop.jar edu.stthomas.gps.SettingsJob /neuro/input /neuro/hive/session

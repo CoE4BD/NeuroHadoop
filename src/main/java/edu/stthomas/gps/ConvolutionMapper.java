@@ -32,7 +32,6 @@ public class ConvolutionMapper extends
 		BAD_PARSE
 	};
 
-	private String sessiondate;
 	private final RatWritable out_value = new RatWritable();
 	private HashMap<Integer, String> kernelMap;
 	private short[][] kernelStack = new short[KERNEL_END_FREQ + 1][KERNEL_WINDOW_SIZE];
@@ -44,9 +43,8 @@ public class ConvolutionMapper extends
 
 	private RatInputFormat rec;
 	private long lastTimestamp = 0;
-	// private static final Logger logger =
-	// Logger.getLogger(ConvolutionMapper.class);
 	private long tempTime;
+	private String fn;
 
 	private MultipleOutputs<NullWritable, RatWritable> multipleOutputs;
 
@@ -86,24 +84,9 @@ public class ConvolutionMapper extends
 
 		multipleOutputs = new MultipleOutputs<NullWritable, RatWritable>(
 				context);
+		fn = generateFileName(context);
+		// tempTime = System.currentTimeMillis();
 
-		tempTime = System.currentTimeMillis();
-		String fpath = ((FileSplit) context.getInputSplit()).getPath()
-				.toString();
-		String fname = new File(fpath).getName();
-		int indexBegin = 0;
-		int indexEnd = fname.indexOf('-');
-		indexBegin = indexEnd + 1;
-		indexEnd = fname.indexOf('-', indexBegin);
-		sessiondate = fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd + 1;
-		indexEnd = fname.indexOf('-', indexBegin);
-		sessiondate = sessiondate + '-' + fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd + 1;
-		indexEnd = fname.indexOf('-', indexBegin);
-		sessiondate = sessiondate + '-' + fname.substring(indexBegin, indexEnd);
-		indexBegin = indexEnd + 4;
-		indexEnd = fname.indexOf('.', indexBegin);
 		try {
 			String kernelCacheName = new Path(HDFS_KERNEL).getName();
 			Path[] cacheFiles = context.getLocalCacheFiles();
@@ -123,9 +106,10 @@ public class ConvolutionMapper extends
 			System.err.println("IOException reading from distributed cache");
 			System.err.println(ioe.toString());
 		} // try
-		System.out.println("Load Kernel: "
-				+ (System.currentTimeMillis() - tempTime));
-		tempTime = System.currentTimeMillis();
+		/*
+		 * System.out.println("Load Kernel: " + (System.currentTimeMillis() -
+		 * tempTime)); tempTime = System.currentTimeMillis();
+		 */
 	} // configure
 
 	public void loadKernel(Path cachePath) throws IOException {
@@ -183,15 +167,17 @@ public class ConvolutionMapper extends
 			System.out.println("Load Data: "
 					+ (System.currentTimeMillis() - tempTime));
 
-			tempTime = System.currentTimeMillis();
+			// tempTime = System.currentTimeMillis();
 			fft.realForwardFull(signal);
-			System.out.println("Signal FFT: "
-					+ (System.currentTimeMillis() - tempTime));
+			/*
+			 * System.out.println("Signal FFT: " + (System.currentTimeMillis() -
+			 * tempTime));
+			 */
 
 			for (short k = KERNEL_START_FREQ; k <= KERNEL_END_FREQ; k++) {
 
 				// Kernel FFT
-				tempTime = System.currentTimeMillis();
+				// tempTime = System.currentTimeMillis();
 				for (int j = 0; j < KERNEL_WINDOW_SIZE; j++) {
 					kernel[j] = (float) kernelStack[k][j];
 				}
@@ -199,11 +185,13 @@ public class ConvolutionMapper extends
 					kernel[j] = 0;
 				}
 				fft.realForwardFull(kernel);
-				System.out.println("Kernel FFT: "
-						+ (System.currentTimeMillis() - tempTime));
+				/*
+				 * System.out.println("Kernel FFT: " +
+				 * (System.currentTimeMillis() - tempTime));
+				 */
 
 				// Product
-				tempTime = System.currentTimeMillis();
+				// tempTime = System.currentTimeMillis();
 				float temp;
 				for (int i = 0; i < SIGNAL_BUFFER_SIZE; i = i + 2) {
 					temp = kernel[i];
@@ -212,30 +200,36 @@ public class ConvolutionMapper extends
 					kernel[i + 1] = -(temp * signal[i + 1] + kernel[i + 1]
 							* signal[i]);
 				}
-				System.out.println("Product: "
-						+ (System.currentTimeMillis() - tempTime));
+				/*
+				 * System.out.println("Product: " + (System.currentTimeMillis()
+				 * - tempTime));
+				 */
 
 				// Inverse FFT
-				tempTime = System.currentTimeMillis();
+				// tempTime = System.currentTimeMillis();
 				fft.complexInverse(kernel, true);
-				System.out.println("Inverse FFT: "
-						+ (System.currentTimeMillis() - tempTime));
+				/*
+				 * System.out.println("Inverse FFT: " +
+				 * (System.currentTimeMillis() - tempTime));
+				 */
 
 				// Output
-				tempTime = System.currentTimeMillis();
+				// tempTime = System.currentTimeMillis();
 				int t = KERNEL_WINDOW_SIZE - 1;
+
 				for (int i = (SIGNAL_BUFFER_SIZE / 2 - KERNEL_WINDOW_SIZE + 1) * 2; i > (SIGNAL_BUFFER_SIZE / 2 - n) * 2; i = i - 2) {
 					out_value.time = (int) timestamp[t];
 					out_value.frequency = k;
 					out_value.convolution = (float) Math.pow(kernel[i], 2);
 					// context.write(NullWritable.get(), out_value);
-					multipleOutputs.write(NullWritable.get(), out_value,
-							generateFileName(context));
+					multipleOutputs.write("seq", NullWritable.get(), out_value,
+							fn);
 					t++;
 				}
-				multipleOutputs.close();
-				System.out.println("Output Data: "
-						+ (System.currentTimeMillis() - tempTime));
+				/*
+				 * System.out.println("Output Data: " +
+				 * (System.currentTimeMillis() - tempTime));
+				 */
 			} // for
 
 		} catch (IOException ioe) {
