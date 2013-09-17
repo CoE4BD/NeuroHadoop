@@ -9,11 +9,8 @@ LOCATION '/neuro/output/passes/'
 add jar ${hiveconf:nhhome}/lib/NeuroHadoop.jar;
 
 -- Create temporary Hive UDF Neuro Group Concat (ngc)
-<<<<<<< HEAD
-create temporary function ngc as 'neurohadoop.NGroupConcat';
-=======
+
 create temporary function ngc as 'edu.stthomas.gps.NGroupConcat';
->>>>>>> test/master
 
 -- Use ngc to generate create script for table rat subset
 SELECT concat(

@@ -5,11 +5,9 @@ ADD JAR ${hiveconf:nhhome}/lib/NeuroHadoop.jar;
 
 CREATE EXTERNAL TABLE rats(time INT, frequency SMALLINT, convolution FLOAT)
 PARTITIONED BY(rat STRING, dt STRING, channel STRING)
-<<<<<<< HEAD
-ROW FORMAT SERDE 'neurohadoop.RatSerde'
-=======
+
 ROW FORMAT SERDE 'edu.stthomas.gps.RatSerde'
->>>>>>> test/master
+
 STORED AS SEQUENCEFILE LOCATION '/neuro/output/rats';
 
 CREATE TABLE ratsaverage(time INT, frequency SMALLINT, convolution FLOAT)
