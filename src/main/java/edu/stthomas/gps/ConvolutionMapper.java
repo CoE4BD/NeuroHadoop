@@ -1,15 +1,15 @@
 package edu.stthomas.gps;
 
-import java.io.IOException;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
@@ -95,22 +95,22 @@ public class ConvolutionMapper extends
 					if (cachePath.getName().equals(kernelCacheName)) {
 						loadKernel(cachePath);
 						break;
-					} // if
-				} // for
+					}
+				}
 				for (int i = KERNEL_START_FREQ; i <= KERNEL_END_FREQ; i++) {
 					kernelStack[i] = ConvertStringArrayToShortArray(kernelMap
 							.get(i).split(","));
-				} // for
-			} // if
+				}
+			}
 		} catch (IOException ioe) {
 			System.err.println("IOException reading from distributed cache");
 			System.err.println(ioe.toString());
-		} // try
+		}
 		/*
 		 * System.out.println("Load Kernel: " + (System.currentTimeMillis() -
 		 * tempTime)); tempTime = System.currentTimeMillis();
 		 */
-	} // configure
+	}
 
 	public void loadKernel(Path cachePath) throws IOException {
 		BufferedReader kernelReader = new BufferedReader(new FileReader(
@@ -126,7 +126,7 @@ public class ConvolutionMapper extends
 		} finally {
 			kernelReader.close();
 		}
-	} // loadKernel
+	}
 
 	public short[] ConvertStringArrayToShortArray(String[] stringArray) {
 		short shortArray[] = new short[stringArray.length];
@@ -134,7 +134,7 @@ public class ConvolutionMapper extends
 			shortArray[i] = Short.parseShort(stringArray[i]);
 		}
 		return shortArray;
-	} // Convert
+	}
 
 	@Override
 	public void map(LongWritable inkey, Text value, Context context)
@@ -152,8 +152,8 @@ public class ConvolutionMapper extends
 		} catch (IOException ioe) {
 			System.err.println(ioe.getMessage());
 			System.exit(0);
-		} // catch
-	} // map
+		}
+	}
 
 	@Override
 	public void cleanup(Context context) throws IOException,
@@ -230,11 +230,11 @@ public class ConvolutionMapper extends
 				 * System.out.println("Output Data: " +
 				 * (System.currentTimeMillis() - tempTime));
 				 */
-			} // for
+			}
 
 		} catch (IOException ioe) {
 			System.err.println(ioe.getMessage());
 			System.exit(0);
-		} // try
+		}
 	}
 }
