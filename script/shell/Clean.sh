@@ -8,5 +8,6 @@ hadoop fs -rm -r /neuro/hive
 hadoop fs -mkdir /neuro/input
 hadoop fs -mkdir /neuro/lookup
 hadoop fs -mkdir /neuro/hive
+hadoop fs -mkdir /neuro/output
 hadoop fs -mkdir /neuro/output/passes
 hadoop fs -mkdir /neuro/output/phase

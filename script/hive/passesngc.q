@@ -26,7 +26,7 @@ SELECT concat(
 		r.channel = s.channel AND
 		r.frequency = s.frequency
 	)
-	WHERE ", ngc(concat("((r.time >= ", mintime, ") AND (r.time <= ", maxtime, ")) OR ")), "FALSE
+	WHERE ", ngc(concat("((r.time >= ", mintime, ") AND (r.time <= ", maxtime, ")) OR ")), "(0==1)
 	\;"
 	)
 FROM passes;
