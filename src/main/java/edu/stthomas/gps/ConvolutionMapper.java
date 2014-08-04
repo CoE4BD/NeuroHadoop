@@ -6,13 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapreduce.AvroMultipleOutputs;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
-import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 
 //import org.apache.log4j.Logger;
 
@@ -20,7 +21,7 @@ import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
  * ConvolutionMapper
  */
 public class ConvolutionMapper extends
-		Mapper<LongWritable, Text, NullWritable, RatWritable> {
+		Mapper<LongWritable, Text, AvroKey<Rat>, NullWritable> {
 
 	public static final String HDFS_KERNEL = "lookup/morlet-2000.dat";
 	public static final int SIGNAL_BUFFER_SIZE = 16777216;
@@ -32,7 +33,8 @@ public class ConvolutionMapper extends
 		BAD_PARSE
 	};
 
-	private final RatWritable out_value = new RatWritable();
+	private Rat rat = new Rat();
+	private AvroKey<Rat> outkey = new AvroKey<Rat>(rat);
 	private HashMap<Integer, String> kernelMap;
 	private short[][] kernelStack = new short[KERNEL_END_FREQ + 1][KERNEL_WINDOW_SIZE];
 	private int n = 0;
@@ -45,8 +47,7 @@ public class ConvolutionMapper extends
 	private long lastTimestamp = 0;
 	private long tempTime;
 	private String fn;
-
-	private MultipleOutputs<NullWritable, RatWritable> multipleOutputs;
+	private AvroMultipleOutputs multipleOutputs;
 
 	private String generateFileName(Context context) {
 		String fpath = ((FileSplit) context.getInputSplit()).getPath()
@@ -82,8 +83,7 @@ public class ConvolutionMapper extends
 	@Override
 	public void setup(Context context) {
 
-		multipleOutputs = new MultipleOutputs<NullWritable, RatWritable>(
-				context);
+		multipleOutputs = new AvroMultipleOutputs(context);
 		fn = generateFileName(context);
 		// tempTime = System.currentTimeMillis();
 
@@ -218,12 +218,12 @@ public class ConvolutionMapper extends
 				int t = KERNEL_WINDOW_SIZE - 1;
 
 				for (int i = (SIGNAL_BUFFER_SIZE / 2 - KERNEL_WINDOW_SIZE + 1) * 2; i > (SIGNAL_BUFFER_SIZE / 2 - n) * 2; i = i - 2) {
-					out_value.time = (int) timestamp[t];
-					out_value.frequency = k;
-					out_value.convolution = (float) Math.pow(kernel[i], 2);
-					// context.write(NullWritable.get(), out_value);
-					multipleOutputs.write("seq", NullWritable.get(), out_value,
-							fn);
+					rat.setTime((int) timestamp[t]);
+					rat.setFrequency((int) k);
+					rat.setConvolution((float) Math.pow(kernel[i], 2));
+
+					// context.write(outkey, NullWritable.get());
+					multipleOutputs.write("AVRO", outkey, NullWritable.get(), fn);
 					t++;
 				}
 				/*
