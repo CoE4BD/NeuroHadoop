@@ -19,14 +19,14 @@ SELECT concat(
 	LOCATION '/neuro/output/ratssubset' 
 	\;
 	INSERT OVERWRITE TABLE ratssubset
-	SELECT r.rat, r.dt, r.channel, r.time, r.frequency, (r.convolution-s.mean) / s.sd AS convolution
+	SELECT r.rat, r.dt, r.channel, r.time, r.frequency, CAST ((r.convolution-s.mean) / s.sd AS FLOAT) AS convolution
 	FROM ratsaverage r JOIN ratstats s ON (
 		r.rat = s.rat AND
 		r.dt = s.dt AND
 		r.channel = s.channel AND
 		r.frequency = s.frequency
 	)
-	WHERE ", ngc(concat("((r.time >= ", mintime, ") AND (r.time <= ", maxtime, ")) OR ")), "(0==1)
+	WHERE ", ngc(concat("((r.time >= ", mintime, ") AND (r.time <= ", maxtime, ")) OR ")), "FALSE
 	\;"
 	)
 FROM passes;

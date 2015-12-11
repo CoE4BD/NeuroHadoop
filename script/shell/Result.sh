@@ -1,3 +1,3 @@
 #!/bin/bash
 
-hive -f $NH_HOME/script/hive/result.q
+impala-shell -k -i w10 -f $NH_HOME/script/hive/result.q

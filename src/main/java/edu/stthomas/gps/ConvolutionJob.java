@@ -7,7 +7,6 @@ import org.apache.avro.mapreduce.AvroKeyOutputFormat;
 import org.apache.avro.mapreduce.AvroMultipleOutputs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -32,7 +31,7 @@ public class ConvolutionJob extends Configured implements Tool {
 
 	void cacheKernel(Job job) throws IOException {
 		Path hdfsPath = new Path(HDFS_KERNEL);
-		DistributedCache.addCacheFile(hdfsPath.toUri(), job.getConfiguration());
+		job.addCacheFile(hdfsPath.toUri());
 	}
 
 	@Override

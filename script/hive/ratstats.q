@@ -4,7 +4,7 @@
 	;
 
 	INSERT OVERWRITE TABLE ratstats 
-	SELECT rat, dt, channel, frequency, AVG(convolution) AS mean, STDDEV_POP(convolution) AS sd
+	SELECT rat, dt, channel, frequency, CAST (AVG(convolution) AS FLOAT) AS mean, CAST (STDDEV_POP(convolution) AS FLOAT) AS sd
 	FROM ratsaverage
 	GROUP BY rat, dt, channel, frequency
 	;

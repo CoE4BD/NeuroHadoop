@@ -23,7 +23,7 @@ public class SettingsJob extends Configured implements Tool {
 				"org.apache.hadoop.io.compress.SnappyCodec");
 		conf.set("mapred.output.compression.type", "BLOCK");
 
-		Job job = new Job(conf);
+		Job job = Job.getInstance(getConf());
 		job.setJobName("SettingsJob");
 		job.setJarByClass(SettingsJob.class);
 		job.setNumReduceTasks(0);

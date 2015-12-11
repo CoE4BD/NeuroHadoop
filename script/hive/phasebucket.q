@@ -1,18 +1,14 @@
-SET maxphase=3141593 + 1;
-SET minphase=-3141593;
-
-DROP TABLE phases;
+DROP TABLE IF EXISTS phases;
 
 CREATE EXTERNAL TABLE phases(time INT, phase STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 LOCATION '/neuro/output/phase';
 
-DROP TABLE phasebuckets;
+DROP TABLE IF EXISTS phasebuckets;
 CREATE TABLE phasebuckets(time INT, phaserange INT)
 LOCATION '/neuro/output/phasebuckets' 
 ;
 INSERT OVERWRITE TABLE phasebuckets
-SELECT time, FLOOR(((CAST(TRIM(phase) AS INT)  - ${hiveconf:minphase}) / (${hiveconf:maxphase} - ${hiveconf:minphase})) * ${hiveconf:maxphaserange}) + 1 AS phaserange
+SELECT time, CAST (FLOOR(((CAST(TRIM(phase) AS INT)  - -3141593) / (3141594 - -3141593)) * 75) + 1 AS INT) AS phaserange
 FROM phases
 ;
-

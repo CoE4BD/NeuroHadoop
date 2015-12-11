@@ -1,12 +1,9 @@
-DROP TABLE rats;
-DROP TABLE ratsaverage;
+DROP TABLE IF EXISTS rats;
+DROP TABLE IF EXISTS ratsaverage;
 
 CREATE EXTERNAL TABLE rats(time INT, frequency INT, convolution FLOAT)
 PARTITIONED BY (rat STRING, dt STRING, channel STRING)
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' 
-STORED AS
-INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
-OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+STORED AS AVRO
 LOCATION '/neuro/output/rats'
 TBLPROPERTIES (
         'avro.schema.literal'='{
@@ -24,4 +21,3 @@ TBLPROPERTIES (
 CREATE TABLE ratsaverage(time INT, frequency SMALLINT, convolution FLOAT)
 PARTITIONED BY(rat STRING, dt STRING, channel STRING)
 LOCATION '/neuro/output/ratsaverage';
-

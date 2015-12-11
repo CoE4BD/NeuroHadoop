@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NH_HOME="${HOME}/NeuroHadoop"
-NUM_BUCKETS=75
+#NUM_BUCKETS=75
 
 # Run the jobs
 for S in Clean Putdata SettingsJob ConvolutionJob Session Rats Ratsaverage Ratsstats Ratssubset Phasebucket Result

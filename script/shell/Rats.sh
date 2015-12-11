@@ -1,5 +1,6 @@
 #!/bin/bash
 
-hive  -hiveconf nhhome=$NH_HOME -f $NH_HOME/script/hive/createrats.q
-hive -f $NH_HOME/script/hive/preparealterrats.q > ~/NeuroHadoop/script/hive/alterrats.q
-hive -f $NH_HOME/script/hive/alterrats.q
+impala-shell -k -i w10 -f $NH_HOME/script/hive/createrats.q
+impala-shell -B -k -i w10 -f $NH_HOME/script/hive/preparealterrats.q > temp
+tail -c +9 temp >$NH_HOME/script/hive/alterrats.q
+impala-shell -k -i w10 -f $NH_HOME/script/hive/alterrats.q
