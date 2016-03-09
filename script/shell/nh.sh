@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NH_HOME="${HOME}/NeuroHadoop"
+NH_HOME="${HOME}/NeuroHadoopImpala"
 #NUM_BUCKETS=75
 
 # Run the jobs
