@@ -1,8 +1,3 @@
 ALTER TABLE ratsaverage ADD PARTITION(rat='R192',dt='2009-11-19',channel='avg');
-ALTER TABLE tempratsaverage ADD PARTITION(rat='R192',dt='2009-11-19',channel='avg');
-INSERT OVERWRITE TABLE tempratsaverage PARTITION (rat='R192',dt='2009-11-19',channel='avg') SELECT time, CAST(frequency AS SMALLINT), CAST (AVG(convolution) AS FLOAT) FROM rats WHERE rat='R192' AND dt='2009-11-19' AND (time >= 3050256) and (time < 11524780) AND NOT(channel LIKE '%r%') GROUP BY time, frequency;
-INSERT INTO TABLE tempratsaverage PARTITION (rat='R192',dt='2009-11-19',channel='avg') SELECT time, CAST(frequency AS SMALLINT), CAST (AVG(convolution) AS FLOAT) FROM rats WHERE rat='R192' AND dt='2009-11-19' AND (time >= 11524780) and (time < 19999304) AND NOT(channel LIKE '%r%') GROUP BY time, frequency;
-INSERT INTO TABLE tempratsaverage PARTITION (rat='R192',dt='2009-11-19',channel='avg') SELECT time, CAST(frequency AS SMALLINT), CAST (AVG(convolution) AS FLOAT) FROM rats WHERE rat='R192' AND dt='2009-11-19' AND (time >= 19999304) and (time < 28473828) AND NOT(channel LIKE '%r%') GROUP BY time, frequency;
-INSERT INTO TABLE tempratsaverage PARTITION (rat='R192',dt='2009-11-19',channel='avg') SELECT time, CAST(frequency AS SMALLINT), CAST (AVG(convolution) AS FLOAT) FROM rats WHERE rat='R192' AND dt='2009-11-19' AND (time >= 28473828) and (time <= 36948352) AND NOT(channel LIKE '%r%') GROUP BY time, frequency;
-INSERT  OVERWRITE TABLE ratsaverage PARTITION (rat='R192',dt='2009-11-19',channel='avg') SELECT time, CAST(frequency AS SMALLINT), CAST (AVG(convolution) AS FLOAT) FROM tempratsaverage WHERE rat='R192' AND dt='2009-11-19' GROUP BY time, frequency;
+INSERT OVERWRITE TABLE ratsaverage PARTITION (rat='R192',dt='2009-11-19',channel='avg') SELECT time, CAST(frequency AS SMALLINT), CAST ((SUM(convolution)/COUNT(convolution)) AS FLOAT) FROM rats WHERE rat='R192' AND dt='2009-11-19'  AND NOT(channel LIKE '%r%') GROUP BY time, frequency;
 
