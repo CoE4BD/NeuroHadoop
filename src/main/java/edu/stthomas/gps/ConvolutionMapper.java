@@ -1,11 +1,5 @@
 package edu.stthomas.gps;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapreduce.AvroMultipleOutputs;
 import org.apache.hadoop.fs.Path;
@@ -14,6 +8,12 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 
 //import org.apache.log4j.Logger;
 
